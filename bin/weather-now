@@ -39,7 +39,7 @@ parser.add_argument(
     help="location, usually 'City, State' or 'City, Country'")
 args = parser.parse_args()
 loc = urllib.quote_plus(' '.join(args.loc))
-units = urllib.quote_plus(args.units)
+units = args.units
 
 try:
     u = "http://api.openweathermap.org/data/2.5/weather?q={0}&units={1}"
