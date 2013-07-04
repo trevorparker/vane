@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+#
+# weather-now - Current weather conditions
+# This file is part of meteo-py
+#
+# Copyright (c) 2013 Trevor Parker <trevor@trevorparker.com>
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+import argparse
+import json
+import requests
+import sys
+import urllib
+
+parser = argparse.ArgumentParser(description='Current weather conditions')
+parser.add_argument(
+    '--units', dest='units', type=str, default='imperial',
+    choices=['imperial', 'metric'], help='units to display')
+parser.add_argument(
+    'loc', type=str, nargs=argparse.REMAINDER,
+    help="location, usually 'City, State' or 'City, Country'")
+args = parser.parse_args()
+loc = urllib.quote_plus(' '.join(args.loc))
+units = urllib.quote_plus(args.units)
+
+try:
+    u = "http://api.openweathermap.org/data/2.5/weather?q={0}&units={1}"
+    r = requests.get(u.format(loc, units))
+    j = json.loads(r.text)
+except:
+    sys.stderr.write("Couldn't load current conditions\n")
+
+if (j['cod'] != 200):
+    sys.exit(j['message'])
+
+temperature = j['main']['temp']
+temperature_unit = 'F' if (units == 'imperial') else 'C'
+conditions = j['weather'][0]['description']
+
+s = "{0} with a temperature of {1}" u"\u00B0" "{2}"
+print s.format(
+    conditions[0].upper() + conditions[1:].lower(),
+    int(round(temperature)), temperature_unit)
