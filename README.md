@@ -1,5 +1,5 @@
-meteo-py
-========
+vane
+====
 
 Simple weather utilities in Python.
 
