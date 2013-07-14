@@ -9,10 +9,8 @@
 # Distributed under the terms of the modified BSD license (see LICENSE)
 
 import argparse
-import json
-import requests
 import sys
-import urllib
+import vane
 
 parser = argparse.ArgumentParser(description='Current weather conditions')
 parser.add_argument(
@@ -22,22 +20,21 @@ parser.add_argument(
     'loc', type=str, nargs=argparse.REMAINDER,
     help="location, usually 'City, State' or 'City, Country'")
 args = parser.parse_args()
-loc = urllib.quote_plus(' '.join(args.loc))
+loc = args.loc
 units = args.units
 
-try:
-    u = "http://api.openweathermap.org/data/2.5/weather?q={0}&units={1}"
-    r = requests.get(u.format(loc, units))
-    j = json.loads(r.text)
-except:
-    sys.stderr.write("Couldn't load current conditions\n")
+if len(loc):
+    w = vane.fetch_weather(loc, units)
+else:
+    parser.print_help()
+    sys.exit()
 
-if (j['cod'] != 200):
-    sys.exit(j['message'])
-
-temperature = j['main']['temp']
-temperature_unit = 'F' if (units == 'imperial') else 'C'
-conditions = j['weather'][0]['description']
+temperature = w['current']['temperature'][0]
+if (w['current']['temperature'][1] == 'fahrenheit'):
+    temperature_unit = 'F'
+else:
+    temperature_unit = 'C'
+conditions = w['current']['summary'][0]
 
 s = "{0} with a temperature of {1}" u"\u00B0" "{2}"
 print s.format(
