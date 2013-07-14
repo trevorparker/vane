@@ -1,5 +1,6 @@
-import vane
+import os
 import unittest
+import vane
 
 class TestFetch(unittest.TestCase):
     def test_owm_good_fetch(self):
