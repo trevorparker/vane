@@ -159,7 +159,7 @@ def _parse_location(loc):
     if loc.isdigit():
         return loc
     else:
-        loc_list = loc.replace(',','').split()
+        loc_list = loc.split(',')
         if len(loc_list) == 2:
             return "{1}/{0}".format(
                 urllib.quote_plus(loc_list[0]),
