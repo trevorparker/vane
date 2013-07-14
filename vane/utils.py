@@ -102,7 +102,7 @@ def _fetch_weather_json(
         'wund': 'http://api.wunderground.com/api/{2}/forecast/'
                 'q/{0}.json'}
     if provider == 'owm':
-        location = urllib.quote_plus(' '.join(location))
+        location = urllib.quote_plus(location)
         units = urllib.quote_plus(units)
         weather_url = weather_urls[provider]
         try:
@@ -125,7 +125,6 @@ def _fetch_weather_json(
     elif provider == 'wund':
         if api_key == None:
             return {'e': 'API key required for Weather Underground provider'}
-        location = ' '.join(location)
         loc_parsed = _parse_location(location)
         units = urllib.quote_plus(units)
         if loc_parsed:
@@ -134,7 +133,7 @@ def _fetch_weather_json(
                 r = requests.get(
                     weather_url.format(loc_parsed, units, api_key))
                 c = json.loads(r.text)
-                if (c['response']['features']['conditions'] != 1):
+                if ('conditions' not in c['response']['features']):
                     return {'e': 'Unable to load current conditions'}
 
                 if (with_forecast):
@@ -142,7 +141,7 @@ def _fetch_weather_json(
                     r = requests.get(
                         forecast_url.format(loc_parsed, units, api_key))
                     f = json.loads(r.text)
-                    if (c['response']['features']['forecast'] != 1):
+                    if ('forecast' not in f['response']['features']):
                         return {'e': 'Unable to load forecast'}
                 else:
                     f = None
