@@ -1,6 +1,8 @@
 vane
 ====
 
+[![Build Status](https://travis-ci.org/trevorparker/vane.png?branch=devel)](https://travis-ci.org/trevorparker/vane)
+
 Simple weather library in Python.
 
 ## Using the library
