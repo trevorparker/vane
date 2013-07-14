@@ -103,6 +103,7 @@ def _fetch_weather_json(
                 'q/{0}.json'}
     if provider == 'owm':
         location = urllib.quote_plus(' '.join(location))
+        units = urllib.quote_plus(units)
         weather_url = weather_urls[provider]
         try:
             r = requests.get(weather_url.format(location, units))
@@ -126,6 +127,7 @@ def _fetch_weather_json(
             return {'e': 'API key required for Weather Underground provider'}
         location = ' '.join(location)
         loc_parsed = _parse_location(location)
+        units = urllib.quote_plus(units)
         if loc_parsed:
             weather_url = weather_urls[provider]
             try:
@@ -156,6 +158,8 @@ def _parse_location(loc):
     else:
         loc_list = loc.replace(',','').split()
         if len(loc_list) == 2:
-            return "{1}/{0}".format(loc_list[0], loc_list[1])
+            return "{1}/{0}".format(
+                urllib.quote_plus(loc_list[0]),
+                urllib.quote_plus(loc_list[1]))
         else:
             return 0
