@@ -4,3 +4,9 @@ python:
     - "2.7"
 install: "pip install -r requirements.txt --use-mirrors"
 script: nosetests
+env:
+    global:
+        secure: |-
+            IZJQd2xUfPWr/tNwhh6ZrIMG+pzJ4fYXDZ2PDvvO5t8Ha2GS2qAbnoF3Zl9K
+            XMBKCJbUxlTePAaUd2G0S9f3eCuQ1tt7EVndcvGa9mtW/ZK88NKLDt3CHcHi
+            yEP9fFRouV+ChhiK5KcUQMc6O+sLsUjzharabOk+sDXVq4drWL8=

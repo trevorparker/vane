@@ -135,6 +135,8 @@ def _fetch_weather_json(
                 c = json.loads(r.text)
                 if ('conditions' not in c['response']['features']):
                     return {'e': 'Unable to load current conditions'}
+                if ('error' in c['response']):
+                    return {'e': c['response']['error']['description']}
 
                 if (with_forecast):
                     forecast_url = forecast_urls[provider]
@@ -143,6 +145,8 @@ def _fetch_weather_json(
                     f = json.loads(r.text)
                     if ('forecast' not in f['response']['features']):
                         return {'e': 'Unable to load forecast'}
+                    if ('error' in c['response']):
+                        return {'e': c['response']['error']['description']}
                 else:
                     f = None
             except requests.exceptions.ConnectionError as e:
