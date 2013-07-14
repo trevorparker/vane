@@ -14,17 +14,24 @@ import vane
 
 parser = argparse.ArgumentParser(description='Current weather conditions')
 parser.add_argument(
+    '--api-key', dest='api_key', type=str, help='API key')
+parser.add_argument(
+    '--provider', dest='provider', type=str, default='owm',
+    choices=['owm', 'wund'], help='API provider to use')
+parser.add_argument(
     '--units', dest='units', type=str, default='imperial',
     choices=['imperial', 'metric'], help='units to display')
 parser.add_argument(
     'loc', type=str, nargs=argparse.REMAINDER,
     help="location, usually 'City, State' or 'City, Country'")
 args = parser.parse_args()
+api_key = args.api_key
+provider = args.provider
 loc = args.loc
 units = args.units
 
 if len(loc):
-    w = vane.fetch_weather(loc, units)
+    w = vane.fetch_weather(loc, units, False, provider, api_key)
 else:
     parser.print_help()
     sys.exit()
