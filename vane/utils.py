@@ -140,7 +140,7 @@ def _fetch_weather_json(
                 if (with_forecast):
                     forecast_url = forecast_urls[provider]
                     r = requests.get(
-                        forecast_url.format(location, units, api_key))
+                        forecast_url.format(loc_parsed, units, api_key))
                     f = json.loads(r.text)
                     if (c['response']['features']['forecast'] != 1):
                         return {'e': 'Unable to load forecast'}
