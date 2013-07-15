@@ -175,9 +175,9 @@ def geolocate():
     try:
         r = requests.get('http://api.hostip.info/get_json.php')
         l = json.loads(r.text)
-        if 'city' in l:
+        if ('city' in l and l['country_code'] != 'XX'):
             return l['city']
         else:
-            return None
+            return ''
     except:
-        return None
+        return ''
