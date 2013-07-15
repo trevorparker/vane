@@ -12,8 +12,8 @@ import urllib
 
 def fetch_weather(
         location='', units='imperial', with_forecast=False, provider='owm',
-        api_key=None):
-    if (location == ''):
+        api_key=''):
+    if location == '':
         location = geolocate()
     w = _fetch_weather_json(location, units, with_forecast, provider, api_key)
     if 'e' in w:
@@ -93,7 +93,7 @@ def _parse_wund(w, units, with_forecast):
 
 def _fetch_weather_json(
         location, units, with_forecast, provider, api_key):
-    if (location == ''):
+    if location == '':
         return {'e': 'Unable to determine location'}
     weather_urls = {
         'owm':  'http://api.openweathermap.org/data/2.5/weather?'
@@ -112,14 +112,14 @@ def _fetch_weather_json(
         try:
             r = requests.get(weather_url.format(location, units))
             c = json.loads(r.text)
-            if (c['cod'] != 200):
+            if c['cod'] != 200:
                 return {'e': c['message']}
 
-            if (with_forecast):
+            if with_forecast:
                 forecast_url = forecast_urls[provider]
                 r = requests.get(forecast_url.format(location, units))
                 f = json.loads(r.text)
-                if (f['cod'] != 200):
+                if f['cod'] != 200:
                     return {'e': f['message']}
             else:
                 f = None
@@ -127,7 +127,7 @@ def _fetch_weather_json(
             return {'e': 'Connection error'}
         return {'c': c, 'f': f}
     elif provider == 'wund':
-        if api_key == None:
+        if api_key == '':
             return {'e': 'API key required for Weather Underground provider'}
         loc_parsed = _parse_location(location)
         units = urllib.quote_plus(units)
@@ -137,19 +137,19 @@ def _fetch_weather_json(
                 r = requests.get(
                     weather_url.format(loc_parsed, units, api_key))
                 c = json.loads(r.text)
-                if ('conditions' not in c['response']['features']):
+                if 'conditions' not in c['response']['features']:
                     return {'e': 'Unable to load current conditions'}
-                if ('error' in c['response']):
+                if 'error' in c['response']:
                     return {'e': c['response']['error']['description']}
 
-                if (with_forecast):
+                if with_forecast:
                     forecast_url = forecast_urls[provider]
                     r = requests.get(
                         forecast_url.format(loc_parsed, units, api_key))
                     f = json.loads(r.text)
-                    if ('forecast' not in f['response']['features']):
+                    if 'forecast' not in f['response']['features']:
                         return {'e': 'Unable to load forecast'}
-                    if ('error' in f['response']):
+                    if 'error' in f['response']:
                         return {'e': f['response']['error']['description']}
                 else:
                     f = None
@@ -175,7 +175,7 @@ def geolocate():
     try:
         r = requests.get('http://api.hostip.info/get_json.php')
         l = json.loads(r.text)
-        if ('city' in l and l['country_code'] != 'XX'):
+        if 'city' in l and l['country_code'] != 'XX':
             return l['city']
         else:
             return ''

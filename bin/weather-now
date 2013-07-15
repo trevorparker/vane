@@ -33,7 +33,7 @@ units = args.units
 w = vane.fetch_weather(loc, units, False, provider, api_key)
 
 temperature = w['current']['temperature'][0]
-if (w['current']['temperature'][1] == 'fahrenheit'):
+if w['current']['temperature'][1] == 'fahrenheit':
     temperature_unit = 'F'
 else:
     temperature_unit = 'C'
