@@ -28,10 +28,5 @@ class TestFetch(unittest.TestCase):
             w = vane.fetch_weather(
                 location=loc, provider='wund', api_key=api_key)
 
-    def test_geolocation(self):
-        w = vane.fetch_weather()
-        self.assertTrue('temperature' in w['current'])
-        self.assertTrue('summary' in w['current'])
-
 if __name__ == '__main__':
     unittest.main()
