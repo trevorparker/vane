@@ -2,6 +2,7 @@ vane changelog
 ==============
 
 ## 0.2.1 (unreleased)
+* Geolocate based on IP address when no location provided
 * Unit testing and continuous integration support with Travis CI
 * New optional parameters: provider and api-key
 * Support Weather Underground as a provider

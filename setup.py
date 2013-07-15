@@ -13,6 +13,6 @@ setup(
     scripts=['bin/weather-now'],
     url='https://github.com/trevorparker/vane',
     license=vane.__license__,
-    description='Simple weather utilities in Python',
+    description='Simple weather library in Python',
     install_requires=['requests']
 )
