@@ -30,11 +30,7 @@ provider = args.provider
 loc = ' '.join(args.loc)
 units = args.units
 
-if len(loc):
-    w = vane.fetch_weather(loc, units, False, provider, api_key)
-else:
-    parser.print_help()
-    sys.exit()
+w = vane.fetch_weather(loc, units, False, provider, api_key)
 
 temperature = w['current']['temperature'][0]
 if (w['current']['temperature'][1] == 'fahrenheit'):

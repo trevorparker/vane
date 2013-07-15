@@ -11,8 +11,10 @@ import sys
 import urllib
 
 def fetch_weather(
-        location, units='imperial', with_forecast=False, provider='owm',
+        location='', units='imperial', with_forecast=False, provider='owm',
         api_key=None):
+    if (location == ''):
+        location = geolocate()
     w = _fetch_weather_json(location, units, with_forecast, provider, api_key)
     if 'e' in w:
         raise Exception(w['e'])
@@ -91,6 +93,8 @@ def _parse_wund(w, units, with_forecast):
 
 def _fetch_weather_json(
         location, units, with_forecast, provider, api_key):
+    if (location == ''):
+        return {'e': 'Unable to determine location'}
     weather_urls = {
         'owm':  'http://api.openweathermap.org/data/2.5/weather?'
                 'q={0}&units={1}',
@@ -166,3 +170,14 @@ def _parse_location(loc):
                 urllib.quote_plus(loc_list[1]))
         else:
             return 0
+
+def geolocate():
+    try:
+        r = requests.get('http://api.hostip.info/get_json.php')
+        l = json.loads(r.text)
+        if 'city' in l:
+            return l['city']
+        else:
+            return None
+    except:
+        return None
